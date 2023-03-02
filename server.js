@@ -3,6 +3,9 @@ const PORT = 3000;
 require("colors");
 const fs = require("fs");
 const { Server } = require("socket.io");
+const { disconnect } = require("process");
+const { underline } = require("colors");
+const { isDataView } = require("util/types");
 const logger = require("tracer").colorConsole();
 
 let users = [];
@@ -65,22 +68,30 @@ const server = http.createServer((req, res) => {
 
 const socketio = new Server(server);
 socketio.on("connection", (client) => {
+  client.on("disconnect", (reason) => {
+    users.forEach((user) => {
+      if (client.id === user.clientId) {
+        users.splice(users.indexOf(user), 1);
+        console.log(users);
+      }
+    });
+  });
   client.on("connectSubmit", (data) => {
     let isRepeating = false;
     if (users.length > 0) {
       for (let i = 0; i < users.length; i++) {
-        if (data.name === users[i]) {
+        if (data.name === users[i].name) {
           isRepeating = true;
         }
       }
       if (!isRepeating) {
-        users.push(data.name);
+        users.push({ name: data.name, clientId: client.id });
         client.emit("connected", { name: data.name });
       } else {
         client.emit("loginError");
       }
     } else {
-      users.push(data.name);
+      users.push({ name: data.name, clientId: client.id });
       client.emit("connected", { name: data.name });
     }
     console.log(users);
