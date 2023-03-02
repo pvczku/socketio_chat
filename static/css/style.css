@@ -97,9 +97,11 @@
 
 .selfSend {
     width: 60%;
+    
 }
 
 .othersSend {
     width: 60%;
     align-self: flex-end;
+    background-color: gray;
 }
