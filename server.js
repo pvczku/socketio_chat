@@ -58,6 +58,9 @@ const server = http.createServer((req, res) => {
           case "js":
             res.writeHead(200, { "content-type": "application/javascript" });
             break;
+          case "ico":
+            res.writeHead(200, { "content-type": "image/x-icon" });
+            break;
 
           default:
             res.writeHead(200, { "content-type": "text/plain" });
