@@ -5,6 +5,8 @@ const fs = require("fs");
 const { Server } = require("socket.io");
 const logger = require("tracer").colorConsole();
 
+let users = [];
+
 const server = http.createServer((req, res) => {
   if (req.url === "/") {
     fs.readFile("static/index.html", (error, data) => {
@@ -17,18 +19,6 @@ const server = http.createServer((req, res) => {
     });
   } else {
     fs.readFile(`static/${req.url}`, (error, data) => {
-      /* 
-          image/jpeg
-          image/png
-          text/html
-          text/plain
-          text/css
-          application/json
-          text/xml
-          application/javascript
-              video/mp4
-              audio/mpeg
-          */
       if (error) {
         res.writeHead(404, { "content-type": "text/html" });
         res.end("<h1>error 404</h1>");
@@ -70,6 +60,30 @@ const server = http.createServer((req, res) => {
       }
     });
   }
+});
+
+const socketio = new Server(server);
+socketio.on("connection", (client) => {
+  client.on("connectSubmit", (data) => {
+    let isRepeating = false;
+    if (users.length > 0) {
+      for (let i = 0; i < users.length; i++) {
+        if (data.name === users[i]) {
+          isRepeating = true;
+        }
+      }
+      if (!isRepeating) {
+        users.push(data.name);
+        client.emit("connected", { name: data.name });
+      } else {
+        client.emit("loginError");
+      }
+    } else {
+      users.push(data.name);
+      client.emit("connected", { name: data.name });
+    }
+    console.log(users);
+  });
 });
 
 server.listen(PORT, () => logger.info("app launched on port " + PORT));
