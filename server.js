@@ -68,15 +68,16 @@ const server = http.createServer((req, res) => {
 
 const socketio = new Server(server);
 socketio.on("connection", (client) => {
-  client.on("disconnect", (reason) => {
-    users.forEach((user) => {
-      if (client.id === user.clientId) {
-        users.splice(users.indexOf(user), 1);
-        console.log(users);
-      }
-    });
-  });
   client.on("connectSubmit", (data) => {
+    client.on("disconnect", (reason) => {
+      users.forEach((user) => {
+        if (client.id === user.clientId) {
+          users.splice(users.indexOf(user), 1);
+          console.log(users);
+        }
+      });
+      client.broadcast.emit("someoneDisconnected", { name: data.name });
+    });
     let isRepeating = false;
     if (users.length > 0) {
       for (let i = 0; i < users.length; i++) {
@@ -95,6 +96,9 @@ socketio.on("connection", (client) => {
       client.emit("connected", { name: data.name });
     }
     console.log(users);
+  });
+  client.on("chatJoin", (data) => {
+    client.broadcast.emit("someoneJoined", { name: data.name });
   });
 });
 
