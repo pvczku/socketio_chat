@@ -18,12 +18,13 @@ const server = http.createServer((req, res) => {
       res.end(data);
     });
   } else {
-    fs.readFile(`static/${req.url}`, (error, data) => {
+    const url = decodeURI(req.url);
+    fs.readFile(`static/${url}`, (error, data) => {
       if (error) {
         res.writeHead(404, { "content-type": "text/html" });
         res.end("<h1>error 404</h1>");
       } else {
-        switch (req.url.split(".")[1]) {
+        switch (url.split(".").pop()) {
           case "png":
             res.writeHead(200, { "content-type": "image/png" });
             break;
