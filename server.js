@@ -100,6 +100,9 @@ socketio.on("connection", (client) => {
   client.on("chatJoin", (data) => {
     client.broadcast.emit("someoneJoined", { name: data.name });
   });
+  client.on("sendMessage", (data) => {
+    client.broadcast.emit("receiveMessage", data)
+  })
 });
 
 server.listen(PORT, () => logger.info("app launched on port " + PORT));

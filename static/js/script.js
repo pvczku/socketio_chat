@@ -23,3 +23,6 @@ client.on("someoneDisconnected", (data) => {
 client.on("loginError", () => {
   alert("There is already a user with this name");
 });
+client.on("receiveMessage", (data) => {
+  chat.othersMessageSend(data.name, data.message);
+});

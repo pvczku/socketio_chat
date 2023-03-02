@@ -13,7 +13,11 @@ export default class LoginUi {
     loginSubmit.id = "loginSubmit";
     loginSubmit.innerText = "Login";
     loginSubmit.addEventListener("click", () => {
-      this.client.emit("connectSubmit", { name: loginInput.value });
+      if (document.getElementById("loginInput").value) {
+        this.client.emit("connectSubmit", { name: loginInput.value });
+      } else {
+        alert("set a username");
+      }
     });
     this.loginBg.append(loginInput, loginSubmit);
     document.body.append(this.loginBg);

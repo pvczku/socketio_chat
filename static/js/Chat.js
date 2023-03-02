@@ -23,6 +23,18 @@ export default class Chat {
     let messageSend = document.createElement("button");
     messageSend.id = "messageSend";
     messageSend.innerText = "Send";
+    messageSend.addEventListener("click", () => {
+      if (messageInput.value) {
+        this.client.emit("sendMessage", {
+          name: this.name,
+          message: messageInput.value,
+        });
+        this.selfMessageSend(messageInput.value);
+        messageInput.value = "";
+      } else {
+        alert("message cannot be empty");
+      }
+    });
     messageWrapper.append(messageInput, messageSend);
     background.append(header, chatWrapper, messageWrapper);
     document.body.append(background);
@@ -30,31 +42,69 @@ export default class Chat {
 
   selfWelcomeMessage = () => {
     let message = document.createElement("div");
-    message.className = "selfWelcome";
+    message.className = "message selfWelcome";
     let messageText = document.createElement("p");
     messageText.className = "messageText";
-    messageText.innerText = `wchodze na czat`;
+    messageText.innerText = `wchodze na czat | ${this.getTime()}`;
     message.append(messageText);
     document.getElementById("chatWrapper").append(message);
+    document.getElementById("chatWrapper").scrollTop =
+      document.getElementById("chatWrapper").scrollHeight;
   };
 
   othersWelcomeMessage = (name) => {
     let message = document.createElement("div");
-    message.className = "otherWelcome";
+    message.className = "message otherWelcome";
     let messageText = document.createElement("p");
     messageText.className = "messageText";
-    messageText.innerText = `${name} wchodzi na czat`;
+    messageText.innerText = `${name} wchodzi na czat | ${this.getTime()}`;
     message.append(messageText);
     document.getElementById("chatWrapper").append(message);
+    document.getElementById("chatWrapper").scrollTop =
+      document.getElementById("chatWrapper").scrollHeight;
   };
 
   disconnectMessage = (name) => {
     let message = document.createElement("div");
-    message.className = "disconnect";
+    message.className = "message disconnect";
     let messageText = document.createElement("p");
     messageText.className = "messageText";
-    messageText.innerText = `${name} wychodzi z czatu`;
+    messageText.innerText = `${name} wychodzi z czatu | ${this.getTime()}`;
     message.append(messageText);
     document.getElementById("chatWrapper").append(message);
+    document.getElementById("chatWrapper").scrollTop =
+      document.getElementById("chatWrapper").scrollHeight;
+  };
+
+  selfMessageSend = (messageValue) => {
+    let message = document.createElement("div");
+    message.className = "message othersSend";
+    let messageText = document.createElement("p");
+    messageText.className = "messageText";
+    messageText.innerText = `me: ${messageValue} | ${this.getTime()}`;
+    message.append(messageText);
+    document.getElementById("chatWrapper").append(message);
+    document.getElementById("chatWrapper").scrollTop =
+      document.getElementById("chatWrapper").scrollHeight;
+  };
+
+  othersMessageSend = (name, messageValue) => {
+    let message = document.createElement("div");
+    message.className = "message selfSend";
+    let messageText = document.createElement("p");
+    messageText.className = "messageText";
+    messageText.innerText = `${name}: ${messageValue} | ${this.getTime()}`;
+    message.append(messageText);
+    document.getElementById("chatWrapper").append(message);
+    document.getElementById("chatWrapper").scrollTop =
+      document.getElementById("chatWrapper").scrollHeight;
+  };
+
+  getTime = () => {
+    let time = new Date();
+    let hours = time.getHours();
+    let minutes = time.getMinutes();
+    let seconds = time.getSeconds();
+    return `${hours}:${minutes}:${seconds}`;
   };
 }

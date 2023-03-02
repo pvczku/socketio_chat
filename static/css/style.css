@@ -47,6 +47,11 @@
 #chatWrapper {
     width: 100%;
     height: 80%;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+        row-gap: 20px;
+            overflow-y: scroll;
 }
 
 #messageWrapper {
@@ -55,6 +60,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 #messageInput {
@@ -68,4 +74,32 @@
 #messageSend {
     height: 100%;
     padding: 5px 10px;
+}
+
+.message {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: cornflowerblue;
+}
+
+.selfWelcome {
+    width: 100%;
+    background-color: rgba(0, 255, 0, .6);
+}
+
+.otherWelcome, .disconnect {
+    width: 60%;
+    background-color: rgba(255, 0, 0, .6);
+}
+
+.selfSend {
+    width: 60%;
+}
+
+.othersSend {
+    width: 60%;
+    align-self: flex-end;
 }
