@@ -1,12 +1,23 @@
 import LoginUi from "./LoginUi.js";
+import Chat from "./Chat.js";
 
 const client = io();
 
 let login = new LoginUi(client);
-
+let chat;
 client.on("connected", (data) => {
   login.removeUi();
-  let chat = new Chat(data.name);
+  chat = new Chat(client, data.name);
+  chat.selfWelcomeMessage();
+  client.emit("chatJoin", { name: data.name });
+});
+
+client.on("someoneJoined", (data) => {
+  chat.othersWelcomeMessage(data.name);
+});
+
+client.on("someoneDisconnected", (data) => {
+  chat.disconnectMessage(data.name);
 });
 
 client.on("loginError", () => {
