@@ -1,7 +1,9 @@
 import LoginUi from "./LoginUi.js";
 import Chat from "./Chat.js";
 
-const client = io();
+const client = io("/", {
+  path: "/socketio"
+});
 
 let login = new LoginUi(client);
 let chat;

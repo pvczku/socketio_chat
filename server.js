@@ -66,9 +66,12 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const socketio = new Server(server);
+const socketio = new Server(server, {
+  path: "/socketio",
+});
 socketio.on("connection", (client) => {
   client.on("connectSubmit", (data) => {
+    console.log("dziala");
     client.on("disconnect", (reason) => {
       users.forEach((user) => {
         if (client.id === user.clientId) {
@@ -101,8 +104,8 @@ socketio.on("connection", (client) => {
     client.broadcast.emit("someoneJoined", { name: data.name });
   });
   client.on("sendMessage", (data) => {
-    client.broadcast.emit("receiveMessage", data)
-  })
+    client.broadcast.emit("receiveMessage", data);
+  });
 });
 
 server.listen(PORT, () => logger.info("app launched on port " + PORT));
