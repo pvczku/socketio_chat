@@ -7,19 +7,23 @@ export default class LoginUi {
   createUi = () => {
     this.loginBg = document.createElement("div");
     this.loginBg.id = "loginBg";
-    let loginInput = document.createElement("input");
-    loginInput.id = "loginInput";
-    let loginSubmit = document.createElement("button");
-    loginSubmit.id = "loginSubmit";
-    loginSubmit.innerText = "Login";
-    loginSubmit.addEventListener("click", () => {
+    const loginForm = document.createElement("form");
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
       if (document.getElementById("loginInput").value) {
         this.client.emit("connectSubmit", { name: loginInput.value });
       } else {
         alert("set a username");
       }
     });
-    this.loginBg.append(loginInput, loginSubmit);
+    let loginInput = document.createElement("input");
+    loginInput.id = "loginInput";
+    let loginSubmit = document.createElement("input");
+    loginSubmit.type = "submit";
+    loginSubmit.id = "loginSubmit";
+    loginSubmit.innerText = "Login";
+    loginForm.append(loginInput, loginSubmit);
+    this.loginBg.append(loginForm);
     document.body.append(this.loginBg);
   };
 
