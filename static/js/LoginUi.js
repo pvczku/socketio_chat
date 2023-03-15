@@ -8,6 +8,7 @@ export default class LoginUi {
     this.loginBg = document.createElement("div");
     this.loginBg.id = "loginBg";
     const loginForm = document.createElement("form");
+    loginForm.id = "loginForm";
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       if (document.getElementById("loginInput").value) {

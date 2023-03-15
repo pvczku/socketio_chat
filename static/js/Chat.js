@@ -16,14 +16,9 @@ export default class Chat {
     header.append(headerText);
     let chatWrapper = document.createElement("div");
     chatWrapper.id = "chatWrapper";
-    let messageWrapper = document.createElement("div");
-    messageWrapper.id = "messageWrapper";
-    let messageInput = document.createElement("textarea");
-    messageInput.id = "messageInput";
-    let messageSend = document.createElement("button");
-    messageSend.id = "messageSend";
-    messageSend.innerText = "Send";
-    messageSend.addEventListener("click", () => {
+    let chatForm = document.createElement("form");
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
       if (messageInput.value) {
         this.client.emit("sendMessage", {
           name: this.name,
@@ -35,8 +30,28 @@ export default class Chat {
         alert("message cannot be empty");
       }
     });
+    let messageWrapper = document.createElement("div");
+    messageWrapper.id = "messageWrapper";
+    let messageInput = document.createElement("input");
+    messageInput.id = "messageInput";
+    let messageSend = document.createElement("button");
+    messageSend.id = "messageSend";
+    messageSend.innerText = "Send";
+    // messageSend.addEventListener("click", () => {
+    //   if (messageInput.value) {
+    //     this.client.emit("sendMessage", {
+    //       name: this.name,
+    //       message: messageInput.value,
+    //     });
+    //     this.selfMessageSend(messageInput.value);
+    //     messageInput.value = "";
+    //   } else {
+    //     alert("message cannot be empty");
+    //   }
+    // });
     messageWrapper.append(messageInput, messageSend);
-    background.append(header, chatWrapper, messageWrapper);
+    chatForm.append(messageWrapper);
+    background.append(header, chatWrapper, chatForm);
     document.body.append(background);
   };
 
